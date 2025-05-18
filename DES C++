@@ -1,0 +1,56 @@
+#include <iostream>
+#include <bitset>
+#include <string>
+using namespace std;
+
+// Define 8 S-Boxes (same as before, shown here abbreviated for brevity)
+int S_BOXES[8][4][16] = {
+    {
+        {14,4,13,1,2,15,11,8,3,10,6,12,5,9,0,7},
+        {0,15,7,4,14,2,13,1,10,6,12,11,9,5,3,8},
+        {4,1,14,8,13,6,2,11,15,12,9,7,3,10,5,0},
+        {15,12,8,2,4,9,1,7,5,11,3,14,10,0,6,13}
+    },
+    // Add S2-S8 as in the full version
+};
+
+// Convert string to binary string
+string stringToBinary(const string &input) {
+    string binary = "";
+    for (char ch : input) {
+        binary += bitset<8>(static_cast<unsigned char>(ch)).to_string();
+    }
+    return binary;
+}
+
+string sBoxSubstitution(const string &input) {
+    string output = "";
+    for (int i = 0; i < 8; ++i) {
+        string block = input.substr(i * 6, 6);
+        if (block.length() != 6) continue;
+
+        int row = stoi(block.substr(0, 1) + block.substr(5, 1), nullptr, 2);
+        int col = stoi(block.substr(1, 4), nullptr, 2);
+
+        int sValue = S_BOXES[i][row][col];
+        output += bitset<4>(sValue).to_string();
+
+        cout << "S-Box " << i + 1 << ": Input = " << block << ", Row = " << row << ", Col = " << col << ", Out = " << sValue << endl;
+    }
+    return output;
+}
+
+int main() {
+    string input = "hello everyone";
+
+    string binary = stringToBinary(input);
+    cout << "Original Binary: " << binary.substr(0, 64) << "...\n";
+
+    string expanded = binary.substr(0, 48);
+    cout << "Expanded Text: " << expanded << endl;
+
+    string result = sBoxSubstitution(expanded);
+    cout << "Final Encrypted Output: " << result << endl;
+
+    return 0;
+}
