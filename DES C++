@@ -3,7 +3,7 @@
 #include <string>
 using namespace std;
 
-// Define 8 S-Boxes (same as before, shown here abbreviated for brevity)
+// Define 8 S-Boxes 
 int S_BOXES[8][4][16] = {
     {
         {14,4,13,1,2,15,11,8,3,10,6,12,5,9,0,7},
